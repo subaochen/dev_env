@@ -1,0 +1,81 @@
+snippet tbl
+	create table ${1:table} (
+		${0:columns}
+	);
+snippet col
+	${1:name}	${2:type}	${3:default ''}	${0:not null}
+snippet ccol
+	${1:name}	varchar2(${2:size})	${3:default ''}	${0:not null}
+snippet ncol
+	${1:name}	number	${3:default 0}	${0:not null}
+snippet dcol
+	${1:name}	date	${3:default sysdate}	${0:not null}
+snippet ind
+	create index ${0:$1_$2} on ${1:table}(${2:column});
+snippet uind
+	create unique index ${1:name} on ${2:table}(${0:column});
+snippet tblcom
+	comment on table ${1:table} is '${0:comment}';
+snippet colcom
+	comment on column ${1:table}.${2:column} is '${0:comment}';
+snippet addcol
+	alter table ${1:table} add (${2:column} ${0:type});
+snippet seq
+	create sequence ${1:name} start with ${2:1} increment by ${3:1} minvalue ${0:1};
+snippet s*
+	select * from ${0:table};
+snippet for
+	FOR ${1:variable} in ${2:query} LOOP
+		${0}
+	END LOOP;
+
+snippet si
+	SELECT ${1:fields} INTO ${2:variables} FROM ${3:table} WHERE ${0:where};
+snippet case
+	CASE ${1:variable}
+		WHEN ${0} THEN ${2:value}
+	END
+snippet if
+	IF ${0} THEN
+	END IF;
+snippet ife
+	IF ${0} THEN
+	ELSE
+	END IF;
+snippet	fun
+	--{{{
+	DROP FUNCTION IF EXISTS ${1:funname}(${2:params});
+	CREATE OR REPLACE FUNCTION $1(
+		$2 --
+	)
+	RETURNS integer AS
+	$BODY$
+	DECLARE
+	BEGIN
+		${0}
+		return 1;
+	END;
+	$BODY$
+	LANGUAGE plpgsql VOLATILE
+	COST 100;
+	ALTER FUNCTION $1($2)
+	OWNER TO postgres;
+	--}}}
+snippet	trigger
+	--{{{
+	DROP TRIGGER IF EXISTS ${1:triggername} ON ${2:table};
+	DROP FUNCTION IF EXISTS $1();
+	CREATE FUNCTION $1() RETURNS trigger AS $body$
+	DECLARE
+	BEGIN
+		IF (TG_OP = 'INSERT') THEN
+			${0}
+		ELSIF (TG_OP = 'UPDATE') THEN
+		END IF;
+		RETURN NULL;
+		-- RETURN NEW;
+	END;
+	$body$ LANGUAGE plpgsql;
+	CREATE TRIGGER $1 AFTER INSERT OR UPDATE ON $2
+		FOR EACH ROW EXECUTE PROCEDURE $1();
+	--}}}
