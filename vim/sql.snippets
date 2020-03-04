@@ -28,7 +28,10 @@ snippet for
 	FOR ${1:variable} in ${2:query} LOOP
 		${0}
 	END LOOP;
-
+snippet insert
+	INSERT INTO ${1:table}(${2:fields}) VALUES(${0:values});
+snippet update
+	UPDATE ${1:table} SET ${2:values} WHERE ${0:where};
 snippet si
 	SELECT ${1:fields} INTO ${2:variables} FROM ${3:table} WHERE ${0:where};
 snippet case
@@ -59,7 +62,7 @@ snippet	fun
 	LANGUAGE plpgsql VOLATILE
 	COST 100;
 	ALTER FUNCTION $1($2)
-	OWNER TO postgres;
+	OWNER TO subaochen;
 	--}}}
 snippet	trigger
 	--{{{
